@@ -1,22 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import StatsCard from "../components/StatsCard";
 import DatabaseList from "../components/DatabaseList";
 import { Database, Table, HardDrive, Zap } from "lucide-react";
+import { databases } from "../App";
+import type { Database as DatabaseType } from "../App";
 
-interface DatabaseType {
-  name: string;
-  tables: number;
-  size: string;
-  lastUpdate: string;
-  status: "active" | "maintenance";
-}
+const Overview: React.FC = () => {
+  const navigate = useNavigate();
 
-interface OverviewProps {
-  databases: DatabaseType[];
-  onDBSelect: (db: DatabaseType) => void;
-}
+  const handleDBSelect = (db: DatabaseType): void => {
+    navigate(`/database/${db.name}`);
+  };
 
-const Overview: React.FC<OverviewProps> = ({ databases, onDBSelect }) => {
   return (
     <>
       {/* Stats Cards */}
@@ -55,7 +51,7 @@ const Overview: React.FC<OverviewProps> = ({ databases, onDBSelect }) => {
       </div>
 
       {/* Database List */}
-      <DatabaseList databases={databases} onDBSelect={onDBSelect} />
+      <DatabaseList databases={databases} onDBSelect={handleDBSelect} />
     </>
   );
 };

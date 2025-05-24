@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
 import Overview from "./pages/Overview";
 import MasterSheet from "./pages/MasterSheet";
+import Tables from "./pages/Tables";
 
 // Types
-interface Database {
+export interface Database {
   name: string;
   tables: number;
   size: string;
@@ -13,8 +14,8 @@ interface Database {
   status: "active" | "maintenance";
 }
 
-// Mock data
-const databases: Database[] = [
+// Mock data - 실제로는 Context나 상태 관리 라이브러리에서 관리
+export const databases: Database[] = [
   { name: "UserDB", tables: 15, size: "2.3GB", lastUpdate: "2 mins ago", status: "active" },
   { name: "ProductDB", tables: 8, size: "1.1GB", lastUpdate: "5 mins ago", status: "active" },
   { name: "OrderDB", tables: 12, size: "3.7GB", lastUpdate: "1 hour ago", status: "active" },
@@ -22,32 +23,19 @@ const databases: Database[] = [
 ];
 
 const App: React.FC = () => {
-  const [selectedDB, setSelectedDB] = useState<Database | null>(null);
-
-  const handleDBSelect = (db: Database): void => {
-    setSelectedDB(db);
-  };
-
-  const handleBackToOverview = (): void => {
-    setSelectedDB(null);
-  };
-
   return (
-    <div className="flex h-screen bg-gray-50">
-      <Sidebar databases={databases} onDBSelect={handleDBSelect} />
-
-      <div className="flex-1 flex flex-col">
-        <Header selectedDB={selectedDB} />
-
-        <main className="flex-1 p-6 overflow-auto">
-          {!selectedDB ? (
-            <Overview databases={databases} onDBSelect={handleDBSelect} />
-          ) : (
-            <MasterSheet selectedDB={selectedDB} onBack={handleBackToOverview} />
-          )}
-        </main>
+    <Router>
+      <div className="flex h-screen bg-gray-50">
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Overview />} />
+            <Route path="overview" element={<Overview />} />
+            <Route path="database/:dbName" element={<MasterSheet />} />
+            <Route path="tables" element={<Tables />} />
+          </Route>
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 };
 
