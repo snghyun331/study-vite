@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Overview from "./pages/Overview";
 import MasterSheet from "./pages/MasterSheet";
 import Tables from "./pages/Tables";
+import TableCatalog from "./pages/TableCatalog";
 
 // Types
 export interface Database {
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             <Route index element={<Overview />} />
             <Route path="overview" element={<Overview />} />
             <Route path="database/:dbName" element={<MasterSheet />} />
+            <Route path="database/:dbName/table/:tableName" element={<TableCatalog />} />
             <Route path="tables" element={<Tables />} />
           </Route>
         </Routes>
